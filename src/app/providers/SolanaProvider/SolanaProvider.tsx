@@ -18,7 +18,7 @@ import { clusterApiUrl } from "@solana/web3.js";
 import { APP_CONFIG } from "../../../shared/config";
 
 // Импорт стилей кошелька
-require("@solana/wallet-adapter-react-ui/styles.css");
+import "@solana/wallet-adapter-react-ui/styles.css";
 
 interface SolanaProviderProps {
     children: React.ReactNode;
