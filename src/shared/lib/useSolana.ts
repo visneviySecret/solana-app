@@ -38,7 +38,6 @@ export const useSolana = () => {
         }
     }, [publicKey, setWalletAddress]);
 
-    // Получение баланса в SOL
     const getBalance = useCallback(
         async (address?: PublicKey): Promise<number | null> => {
             const targetAddress = address || publicKey;
@@ -48,7 +47,6 @@ export const useSolana = () => {
                 const balance = await connection.getBalance(targetAddress);
                 const balanceInSol = balance / LAMPORTS_PER_SOL;
 
-                // Сохраняем баланс в store
                 setWalletBalance(balanceInSol);
 
                 return balanceInSol;
@@ -60,7 +58,6 @@ export const useSolana = () => {
         [publicKey, connection, setWalletBalance]
     );
 
-    // Получение информации об аккаунте
     const getAccountInfo = useCallback(
         async (address: PublicKey) => {
             try {
@@ -76,7 +73,6 @@ export const useSolana = () => {
         [connection]
     );
 
-    // Проверка существования аккаунта
     const accountExists = useCallback(
         async (address: PublicKey): Promise<boolean> => {
             const accountInfo = await getAccountInfo(address);
@@ -85,40 +81,33 @@ export const useSolana = () => {
         [getAccountInfo]
     );
 
-    // Сокращение адреса для отображения
     const shortenAddress = useCallback((address: string, chars = 4): string => {
         return `${address.slice(0, chars)}...${address.slice(-chars)}`;
     }, []);
 
     const cancelWalletSelection = useCallback(async () => {
         try {
-            // Отключаем кошелек если он подключен
             if (connected && disconnect) {
                 await disconnect();
             }
 
-            // Очищаем состояние в Zustand store
             clearWalletSelection();
 
-            // Очищаем localStorage для совместимости со старым кодом
             localStorage.removeItem(LOCAL_STORAGE_KEYS.WALLET_NAME);
             if (wallet?.adapter.name === WALLET_NAMES.PHANTOM) {
                 localStorage.removeItem(LOCAL_STORAGE_KEYS.PHANTOM_WALLET);
             }
 
-            // Небольшая задержка для корректного сброса состояния
             setTimeout(() => {
                 window.location.reload();
             }, 100);
         } catch (error) {
             console.error("Ошибка при отмене выбора кошелька:", error);
-            // В случае ошибки очищаем store и перезагружаем
             clearWalletSelection();
             window.location.reload();
         }
     }, [connected, disconnect, clearWalletSelection, wallet]);
 
-    // Обновленный метод для сохранения транзакции
     const saveTransaction = useCallback(
         (signature: string) => {
             setLastTransaction(signature);
@@ -127,7 +116,6 @@ export const useSolana = () => {
     );
 
     return {
-        // Wallet state
         publicKey,
         connected,
         sendTransaction,
@@ -137,7 +125,6 @@ export const useSolana = () => {
         wallet,
         disconnect,
 
-        // Utility functions
         getBalance,
         getAccountInfo,
         accountExists,
@@ -145,7 +132,6 @@ export const useSolana = () => {
         cancelWalletSelection,
         saveTransaction,
 
-        // Store actions (для других компонентов, если нужно)
         setSelectedWallet,
         setWalletConnected,
         setWalletAddress,
@@ -154,7 +140,6 @@ export const useSolana = () => {
         resetWalletState,
         clearWalletSelection,
 
-        // Computed values
         walletAddress: publicKey?.toBase58() || "",
         shortAddress: publicKey ? shortenAddress(publicKey.toBase58()) : "",
     };

@@ -32,13 +32,12 @@ export const HomePageComponent: React.FC = () => {
 
     const { lastTransactionSignature, walletBalance } = useWalletStore();
 
-    // Получение баланса кошелька
     const handleGetBalance = useCallback(async () => {
         if (!publicKey) return;
 
         try {
             setLoading(true);
-            await getBalance(); // Баланс автоматически сохранится в store
+            await getBalance();
         } catch (error) {
             console.error("Ошибка получения баланса:", error);
         } finally {
@@ -46,14 +45,12 @@ export const HomePageComponent: React.FC = () => {
         }
     }, [publicKey, getBalance, setLoading]);
 
-    // Отправка тестовой транзакции (самому себе)
     const sendTestTransaction = useCallback(async () => {
         if (!publicKey || !connected) return;
 
         try {
             setLoading(true);
 
-            // Создаем транзакцию отправки 0.001 SOL самому себе
             const transaction = new Transaction().add(
                 SystemProgram.transfer({
                     fromPubkey: publicKey,
@@ -62,20 +59,16 @@ export const HomePageComponent: React.FC = () => {
                 })
             );
 
-            // Получаем последний blockhash
             const { blockhash } = await connection.getLatestBlockhash();
             transaction.recentBlockhash = blockhash;
             transaction.feePayer = publicKey;
 
-            // Отправляем транзакцию
             const signature = await sendTransaction(transaction, connection);
 
-            // Сохраняем транзакцию в store
             saveTransaction(signature);
 
             console.log("Транзакция отправлена:", signature);
 
-            // Обновляем баланс после транзакции
             setTimeout(() => {
                 handleGetBalance();
             }, 2000);
