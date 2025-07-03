@@ -1,13 +1,14 @@
-import './App.css';
+import "./App.css";
+import { SolanaProvider } from "./providers/SolanaProvider/SolanaProvider";
+import { HomePage } from "../pages/HomePage";
 
 function App() {
     return (
-        <div className="app">
-            <header className="app-header">
-                <h1>Solana React App</h1>
-                <p>Приложение с FSD архитектурой готово к разработке</p>
-            </header>
-        </div>
+        <SolanaProvider>
+            <div className="app">
+                <HomePage />
+            </div>
+        </SolanaProvider>
     );
 }
 
