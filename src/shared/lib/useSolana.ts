@@ -3,7 +3,8 @@ import { PublicKey, LAMPORTS_PER_SOL } from "@solana/web3.js";
 import { useState, useCallback } from "react";
 
 export const useSolana = () => {
-    const { publicKey, connected, sendTransaction } = useWallet();
+    const { publicKey, connected, sendTransaction, disconnect, wallet } =
+        useWallet();
     const { connection } = useConnection();
     const [loading, setLoading] = useState(false);
 
@@ -54,6 +55,31 @@ export const useSolana = () => {
         return `${address.slice(0, chars)}...${address.slice(-chars)}`;
     }, []);
 
+    // Отмена выбора кошелька (сброс без перезагрузки)
+    const cancelWalletSelection = useCallback(async () => {
+        try {
+            // Отключаем кошелек если он подключен
+            if (connected && disconnect) {
+                await disconnect();
+            }
+
+            // Очищаем localStorage
+            localStorage.removeItem("walletName");
+            if (wallet?.adapter.name === "Phantom") {
+                localStorage.removeItem("phantom-wallet");
+            }
+
+            // Очищаем localStorage
+            setTimeout(() => {
+                window.location.reload();
+            }, 100);
+        } catch (error) {
+            console.error("Ошибка при отмене выбора кошелька:", error);
+            // В случае ошибки просто перезагружаем
+            window.location.reload();
+        }
+    }, [connected, disconnect, wallet]);
+
     return {
         // Wallet state
         publicKey,
@@ -62,12 +88,15 @@ export const useSolana = () => {
         connection,
         loading,
         setLoading,
+        wallet,
+        disconnect,
 
         // Utility functions
         getBalance,
         getAccountInfo,
         accountExists,
         shortenAddress,
+        cancelWalletSelection,
 
         // Computed values
         walletAddress: publicKey?.toBase58() || "",

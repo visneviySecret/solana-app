@@ -41,6 +41,49 @@ export const WalletButtons = styled.div`
     justify-content: center;
     margin-bottom: 30px;
     flex-wrap: wrap;
+    align-items: center;
+    position: relative;
+`;
+
+export const CancelWalletButton = styled.button`
+    background: #ff4757;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: bold;
+    transition: all 0.2s ease;
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    z-index: 10;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+
+    &:hover {
+        background: #ff3742;
+        transform: scale(1.1);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    &:active {
+        transform: scale(0.95);
+    }
+
+    &:focus {
+        outline: none;
+        box-shadow: 0 0 0 2px #ff475780, 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+`;
+
+export const WalletButtonWrapper = styled.div`
+    position: relative;
+    display: inline-block;
 `;
 
 export const WalletInfo = styled.div`
@@ -166,6 +209,45 @@ export const Features = styled.div`
             color: #28a745;
             font-weight: bold;
         }
+    }
+`;
+
+export const DebugInfo = styled.div`
+    background: #fff3cd;
+    border: 1px solid #ffeaa7;
+    border-radius: 8px;
+    padding: 15px;
+    margin-top: 20px;
+    font-size: 0.9rem;
+
+    h4 {
+        margin: 0 0 10px 0;
+        color: #856404;
+    }
+
+    p {
+        margin: 5px 0;
+        color: #856404;
+    }
+`;
+
+export const ResetSection = styled.div`
+    background: #f8d7da;
+    border: 1px solid #f5c6cb;
+    border-radius: 8px;
+    padding: 15px;
+    margin-top: 20px;
+    text-align: center;
+
+    h4 {
+        margin: 0 0 10px 0;
+        color: #721c24;
+    }
+
+    p {
+        margin: 10px 0;
+        color: #721c24;
+        font-size: 0.9rem;
     }
 `;
 

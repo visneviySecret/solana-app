@@ -19,6 +19,8 @@ export const HomePageComponent: React.FC = () => {
         shortAddress,
         loading,
         setLoading,
+        wallet,
+        cancelWalletSelection,
     } = useSolana();
 
     const [balance, setBalance] = useState<number | null>(null);
@@ -94,7 +96,17 @@ export const HomePageComponent: React.FC = () => {
 
                 <Styled.WalletSection>
                     <Styled.WalletButtons>
-                        <WalletMultiButton />
+                        <Styled.WalletButtonWrapper>
+                            <WalletMultiButton />
+                            {wallet && !connected && (
+                                <Styled.CancelWalletButton
+                                    onClick={cancelWalletSelection}
+                                    title={`Отменить выбор ${wallet.adapter.name}`}
+                                >
+                                    ✕
+                                </Styled.CancelWalletButton>
+                            )}
+                        </Styled.WalletButtonWrapper>
                         {connected && <WalletDisconnectButton />}
                     </Styled.WalletButtons>
 
@@ -102,6 +114,13 @@ export const HomePageComponent: React.FC = () => {
                         <Styled.WalletInfo>
                             <Styled.WalletDetails>
                                 <h3>Информация о кошельке</h3>
+
+                                <Styled.DetailItem>
+                                    <Styled.Label>Кошелек:</Styled.Label>
+                                    <Styled.Value>
+                                        {wallet?.adapter.name}
+                                    </Styled.Value>
+                                </Styled.DetailItem>
 
                                 <Styled.DetailItem>
                                     <Styled.Label>Полный адрес:</Styled.Label>
