@@ -1,12 +1,42 @@
 import { useWallet, useConnection } from "@solana/wallet-adapter-react";
 import { PublicKey, LAMPORTS_PER_SOL } from "@solana/web3.js";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
+import { useWalletStore } from "../store/walletStore";
+import { WALLET_NAMES, LOCAL_STORAGE_KEYS } from "../constants";
 
 export const useSolana = () => {
     const { publicKey, connected, sendTransaction, disconnect, wallet } =
         useWallet();
     const { connection } = useConnection();
     const [loading, setLoading] = useState(false);
+
+    const {
+        setSelectedWallet,
+        setWalletConnected,
+        setWalletAddress,
+        setLastTransaction,
+        setWalletBalance,
+        resetWalletState,
+        clearWalletSelection,
+    } = useWalletStore();
+
+    useEffect(() => {
+        if (wallet?.adapter.name) {
+            setSelectedWallet(wallet.adapter.name);
+        }
+    }, [wallet?.adapter.name, setSelectedWallet]);
+
+    useEffect(() => {
+        setWalletConnected(connected);
+    }, [connected, setWalletConnected]);
+
+    useEffect(() => {
+        if (publicKey) {
+            setWalletAddress(publicKey.toBase58());
+        } else {
+            setWalletAddress(null);
+        }
+    }, [publicKey, setWalletAddress]);
 
     // Получение баланса в SOL
     const getBalance = useCallback(
@@ -16,13 +46,18 @@ export const useSolana = () => {
 
             try {
                 const balance = await connection.getBalance(targetAddress);
-                return balance / LAMPORTS_PER_SOL;
+                const balanceInSol = balance / LAMPORTS_PER_SOL;
+
+                // Сохраняем баланс в store
+                setWalletBalance(balanceInSol);
+
+                return balanceInSol;
             } catch (error) {
                 console.error("Ошибка получения баланса:", error);
                 return null;
             }
         },
-        [publicKey, connection]
+        [publicKey, connection, setWalletBalance]
     );
 
     // Получение информации об аккаунте
@@ -55,7 +90,6 @@ export const useSolana = () => {
         return `${address.slice(0, chars)}...${address.slice(-chars)}`;
     }, []);
 
-    // Отмена выбора кошелька (сброс без перезагрузки)
     const cancelWalletSelection = useCallback(async () => {
         try {
             // Отключаем кошелек если он подключен
@@ -63,22 +97,34 @@ export const useSolana = () => {
                 await disconnect();
             }
 
-            // Очищаем localStorage
-            localStorage.removeItem("walletName");
-            if (wallet?.adapter.name === "Phantom") {
-                localStorage.removeItem("phantom-wallet");
+            // Очищаем состояние в Zustand store
+            clearWalletSelection();
+
+            // Очищаем localStorage для совместимости со старым кодом
+            localStorage.removeItem(LOCAL_STORAGE_KEYS.WALLET_NAME);
+            if (wallet?.adapter.name === WALLET_NAMES.PHANTOM) {
+                localStorage.removeItem(LOCAL_STORAGE_KEYS.PHANTOM_WALLET);
             }
 
-            // Очищаем localStorage
+            // Небольшая задержка для корректного сброса состояния
             setTimeout(() => {
                 window.location.reload();
             }, 100);
         } catch (error) {
             console.error("Ошибка при отмене выбора кошелька:", error);
-            // В случае ошибки просто перезагружаем
+            // В случае ошибки очищаем store и перезагружаем
+            clearWalletSelection();
             window.location.reload();
         }
-    }, [connected, disconnect, wallet]);
+    }, [connected, disconnect, clearWalletSelection, wallet]);
+
+    // Обновленный метод для сохранения транзакции
+    const saveTransaction = useCallback(
+        (signature: string) => {
+            setLastTransaction(signature);
+        },
+        [setLastTransaction]
+    );
 
     return {
         // Wallet state
@@ -97,6 +143,16 @@ export const useSolana = () => {
         accountExists,
         shortenAddress,
         cancelWalletSelection,
+        saveTransaction,
+
+        // Store actions (для других компонентов, если нужно)
+        setSelectedWallet,
+        setWalletConnected,
+        setWalletAddress,
+        setLastTransaction,
+        setWalletBalance,
+        resetWalletState,
+        clearWalletSelection,
 
         // Computed values
         walletAddress: publicKey?.toBase58() || "",

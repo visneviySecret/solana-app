@@ -1,11 +1,17 @@
-import React, { useState, useCallback } from "react";
+import React, { useCallback } from "react";
 import {
     WalletMultiButton,
     WalletDisconnectButton,
 } from "@solana/wallet-adapter-react-ui";
-import { Transaction, SystemProgram, LAMPORTS_PER_SOL } from "@solana/web3.js";
+import { Transaction, SystemProgram } from "@solana/web3.js";
 import { Button } from "../../shared/ui/Button";
 import { useSolana } from "../../shared/lib/useSolana";
+import { useWalletStore } from "../../shared/store/walletStore";
+import {
+    TRANSACTION_AMOUNTS,
+    SOLANA_EXPLORER_BASE_URL,
+    SOLANA_NETWORK,
+} from "../../shared/constants";
 import * as Styled from "./HomePage.styles";
 
 export const HomePageComponent: React.FC = () => {
@@ -21,10 +27,10 @@ export const HomePageComponent: React.FC = () => {
         setLoading,
         wallet,
         cancelWalletSelection,
+        saveTransaction,
     } = useSolana();
 
-    const [balance, setBalance] = useState<number | null>(null);
-    const [lastTxSignature, setLastTxSignature] = useState<string>("");
+    const { lastTransactionSignature, walletBalance } = useWalletStore();
 
     // Получение баланса кошелька
     const handleGetBalance = useCallback(async () => {
@@ -32,8 +38,7 @@ export const HomePageComponent: React.FC = () => {
 
         try {
             setLoading(true);
-            const walletBalance = await getBalance();
-            setBalance(walletBalance);
+            await getBalance(); // Баланс автоматически сохранится в store
         } catch (error) {
             console.error("Ошибка получения баланса:", error);
         } finally {
@@ -53,7 +58,7 @@ export const HomePageComponent: React.FC = () => {
                 SystemProgram.transfer({
                     fromPubkey: publicKey,
                     toPubkey: publicKey,
-                    lamports: 0.001 * LAMPORTS_PER_SOL, // 0.001 SOL
+                    lamports: TRANSACTION_AMOUNTS.TEST_TRANSACTION,
                 })
             );
 
@@ -64,7 +69,9 @@ export const HomePageComponent: React.FC = () => {
 
             // Отправляем транзакцию
             const signature = await sendTransaction(transaction, connection);
-            setLastTxSignature(signature);
+
+            // Сохраняем транзакцию в store
+            saveTransaction(signature);
 
             console.log("Транзакция отправлена:", signature);
 
@@ -84,6 +91,7 @@ export const HomePageComponent: React.FC = () => {
         sendTransaction,
         handleGetBalance,
         setLoading,
+        saveTransaction,
     ]);
 
     return (
@@ -138,14 +146,16 @@ export const HomePageComponent: React.FC = () => {
 
                                 <Styled.DetailItem>
                                     <Styled.Label>Сеть:</Styled.Label>
-                                    <Styled.Value>Devnet</Styled.Value>
+                                    <Styled.Value>
+                                        {SOLANA_NETWORK.DEVNET}
+                                    </Styled.Value>
                                 </Styled.DetailItem>
 
-                                {balance !== null && (
+                                {walletBalance !== null && (
                                     <Styled.DetailItem>
                                         <Styled.Label>Баланс:</Styled.Label>
                                         <Styled.Value>
-                                            {balance.toFixed(4)} SOL
+                                            {walletBalance.toFixed(4)} SOL
                                         </Styled.Value>
                                     </Styled.DetailItem>
                                 )}
@@ -166,8 +176,9 @@ export const HomePageComponent: React.FC = () => {
                                     onClick={sendTestTransaction}
                                     disabled={
                                         loading ||
-                                        balance === null ||
-                                        balance < 0.01
+                                        walletBalance === null ||
+                                        walletBalance <
+                                            TRANSACTION_AMOUNTS.MIN_BALANCE_FOR_TRANSACTION
                                     }
                                     variant="secondary"
                                 >
@@ -177,18 +188,20 @@ export const HomePageComponent: React.FC = () => {
                                 </Button>
                             </Styled.Actions>
 
-                            {lastTxSignature && (
+                            {lastTransactionSignature && (
                                 <Styled.TransactionInfo>
                                     <h4>Последняя транзакция:</h4>
                                     <Styled.TxLink
-                                        href={`https://explorer.solana.com/tx/${lastTxSignature}?cluster=devnet`}
+                                        href={`${SOLANA_EXPLORER_BASE_URL}/tx/${lastTransactionSignature}?cluster=${SOLANA_NETWORK.DEVNET}`}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                     >
-                                        {`${lastTxSignature.slice(
+                                        {`${lastTransactionSignature.slice(
                                             0,
                                             8
-                                        )}...${lastTxSignature.slice(-8)}`}
+                                        )}...${lastTransactionSignature.slice(
+                                            -8
+                                        )}`}
                                     </Styled.TxLink>
                                     <Styled.TxNote>
                                         Нажмите для просмотра в Solana Explorer
