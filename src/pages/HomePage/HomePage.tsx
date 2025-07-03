@@ -6,9 +6,9 @@ import {
 import { Transaction, SystemProgram, LAMPORTS_PER_SOL } from "@solana/web3.js";
 import { Button } from "../../shared/ui/Button";
 import { useSolana } from "../../shared/lib/useSolana";
-import "./HomePage.css";
+import * as Styled from "./HomePage.styles";
 
-export const HomePage: React.FC = () => {
+export const HomePageComponent: React.FC = () => {
     const {
         publicKey,
         connected,
@@ -85,114 +85,120 @@ export const HomePage: React.FC = () => {
     ]);
 
     return (
-        <div className="home-page">
-            <header className="home-header">
-                <h1>Solana Wallet Adapter</h1>
-                <p>Подключите кошелек для взаимодействия с Solana</p>
-            </header>
+        <Styled.ResponsiveContainer>
+            <Styled.HomePage>
+                <Styled.HomeHeader>
+                    <h1>Solana Wallet Adapter</h1>
+                    <p>Подключите кошелек для взаимодействия с Solana</p>
+                </Styled.HomeHeader>
 
-            <div className="wallet-section">
-                <div className="wallet-buttons">
-                    <WalletMultiButton />
-                    {connected && <WalletDisconnectButton />}
-                </div>
+                <Styled.WalletSection>
+                    <Styled.WalletButtons>
+                        <WalletMultiButton />
+                        {connected && <WalletDisconnectButton />}
+                    </Styled.WalletButtons>
 
-                {connected && publicKey && (
-                    <div className="wallet-info">
-                        <div className="wallet-details">
-                            <h3>Информация о кошельке</h3>
+                    {connected && publicKey && (
+                        <Styled.WalletInfo>
+                            <Styled.WalletDetails>
+                                <h3>Информация о кошельке</h3>
 
-                            <div className="detail-item">
-                                <span className="label">Полный адрес:</span>
-                                <span className="value" title={walletAddress}>
-                                    {walletAddress}
-                                </span>
-                            </div>
+                                <Styled.DetailItem>
+                                    <Styled.Label>Полный адрес:</Styled.Label>
+                                    <Styled.Value title={walletAddress}>
+                                        {walletAddress}
+                                    </Styled.Value>
+                                </Styled.DetailItem>
 
-                            <div className="detail-item">
-                                <span className="label">
-                                    Сокращенный адрес:
-                                </span>
-                                <span className="value">{shortAddress}</span>
-                            </div>
+                                <Styled.DetailItem>
+                                    <Styled.Label>
+                                        Сокращенный адрес:
+                                    </Styled.Label>
+                                    <Styled.Value>{shortAddress}</Styled.Value>
+                                </Styled.DetailItem>
 
-                            <div className="detail-item">
-                                <span className="label">Сеть:</span>
-                                <span className="value">Devnet</span>
-                            </div>
+                                <Styled.DetailItem>
+                                    <Styled.Label>Сеть:</Styled.Label>
+                                    <Styled.Value>Devnet</Styled.Value>
+                                </Styled.DetailItem>
 
-                            {balance !== null && (
-                                <div className="detail-item">
-                                    <span className="label">Баланс:</span>
-                                    <span className="value">
-                                        {balance.toFixed(4)} SOL
-                                    </span>
-                                </div>
-                            )}
-                        </div>
+                                {balance !== null && (
+                                    <Styled.DetailItem>
+                                        <Styled.Label>Баланс:</Styled.Label>
+                                        <Styled.Value>
+                                            {balance.toFixed(4)} SOL
+                                        </Styled.Value>
+                                    </Styled.DetailItem>
+                                )}
+                            </Styled.WalletDetails>
 
-                        <div className="actions">
-                            <Button
-                                onClick={handleGetBalance}
-                                disabled={loading}
-                                variant="primary"
-                            >
-                                {loading ? "Загрузка..." : "Получить баланс"}
-                            </Button>
-
-                            <Button
-                                onClick={sendTestTransaction}
-                                disabled={
-                                    loading ||
-                                    balance === null ||
-                                    balance < 0.01
-                                }
-                                variant="secondary"
-                            >
-                                {loading
-                                    ? "Отправка..."
-                                    : "Тестовая транзакция (0.001 SOL)"}
-                            </Button>
-                        </div>
-
-                        {lastTxSignature && (
-                            <div className="transaction-info">
-                                <h4>Последняя транзакция:</h4>
-                                <a
-                                    href={`https://explorer.solana.com/tx/${lastTxSignature}?cluster=devnet`}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="tx-link"
+                            <Styled.Actions>
+                                <Button
+                                    onClick={handleGetBalance}
+                                    disabled={loading}
+                                    variant="primary"
                                 >
-                                    {`${lastTxSignature.slice(
-                                        0,
-                                        8
-                                    )}...${lastTxSignature.slice(-8)}`}
-                                </a>
-                                <p className="tx-note">
-                                    Нажмите для просмотра в Solana Explorer
-                                </p>
-                            </div>
-                        )}
-                    </div>
-                )}
+                                    {loading
+                                        ? "Загрузка..."
+                                        : "Получить баланс"}
+                                </Button>
 
-                {!connected && (
-                    <div className="connect-prompt">
-                        <p>Подключите кошелек для начала работы с Solana</p>
-                        <p>Поддерживаемые кошельки: Phantom, Solflare, Torus</p>
-                        <div className="features">
-                            <h4>Возможности:</h4>
-                            <ul>
-                                <li>Просмотр баланса кошелька</li>
-                                <li>Отправка тестовых транзакций</li>
-                                <li>Взаимодействие с Solana devnet</li>
-                                <li>Интеграция с популярными кошельками</li>
-                            </ul>
-                        </div>
-                    </div>
-                )}
-            </div>
-        </div>
+                                <Button
+                                    onClick={sendTestTransaction}
+                                    disabled={
+                                        loading ||
+                                        balance === null ||
+                                        balance < 0.01
+                                    }
+                                    variant="secondary"
+                                >
+                                    {loading
+                                        ? "Отправка..."
+                                        : "Тестовая транзакция (0.001 SOL)"}
+                                </Button>
+                            </Styled.Actions>
+
+                            {lastTxSignature && (
+                                <Styled.TransactionInfo>
+                                    <h4>Последняя транзакция:</h4>
+                                    <Styled.TxLink
+                                        href={`https://explorer.solana.com/tx/${lastTxSignature}?cluster=devnet`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        {`${lastTxSignature.slice(
+                                            0,
+                                            8
+                                        )}...${lastTxSignature.slice(-8)}`}
+                                    </Styled.TxLink>
+                                    <Styled.TxNote>
+                                        Нажмите для просмотра в Solana Explorer
+                                    </Styled.TxNote>
+                                </Styled.TransactionInfo>
+                            )}
+                        </Styled.WalletInfo>
+                    )}
+
+                    {!connected && (
+                        <Styled.ConnectPrompt>
+                            <p>Подключите кошелек для начала работы с Solana</p>
+                            <p>
+                                Поддерживаемые кошельки: Phantom, Solflare,
+                                Torus
+                            </p>
+                            <Styled.Features>
+                                <h4>Возможности:</h4>
+                                <ul>
+                                    <li>Просмотр баланса кошелька</li>
+                                    <li>Отправка тестовых транзакций</li>
+                                    <li>Взаимодействие с Solana devnet</li>
+                                    <li>Интеграция с популярными кошельками</li>
+                                </ul>
+                            </Styled.Features>
+                        </Styled.ConnectPrompt>
+                    )}
+                </Styled.WalletSection>
+            </Styled.HomePage>
+        </Styled.ResponsiveContainer>
     );
 };
