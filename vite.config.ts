@@ -1,10 +1,31 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
+import { nodePolyfills } from "vite-plugin-node-polyfills";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-    plugins: [react()],
+    plugins: [
+        react(),
+        nodePolyfills({
+            include: [
+                "buffer",
+                "process",
+                "util",
+                "crypto",
+                "stream",
+                "assert",
+                "events",
+                "url",
+                "querystring",
+            ],
+            globals: {
+                Buffer: true,
+                global: true,
+                process: true,
+            },
+        }),
+    ],
     resolve: {
         alias: {
             "@": path.resolve(__dirname, "./src"),
@@ -23,8 +44,16 @@ export default defineConfig({
     build: {
         outDir: "build",
         sourcemap: true,
+        rollupOptions: {
+            external: [],
+        },
     },
     define: {
         global: "globalThis",
+        // Переменные для подавления dev warnings
+        "process.env.NODE_ENV": JSON.stringify(
+            process.env.NODE_ENV || "development"
+        ),
+        "import.meta.env.DEV": true,
     },
 });
