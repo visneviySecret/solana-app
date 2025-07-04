@@ -1,0 +1,1 @@
+export { WalletConnectionWidget } from "./WalletConnectionWidget";
