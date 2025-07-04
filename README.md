@@ -58,23 +58,13 @@ yarn build:gh-pages
 
 2. **Автоматический деплой**:
 
-    - При пуше в `main`/`master` ветку
+    - При пуше в `master` ветку
     - GitHub Actions собирает и деплоит приложение
-    - Доступно на `https://visneviysecret.github.io//solana-app/`
+    - Доступно на `https://visneviysecret.github.io/solana-app/`
 
 3. **Мониторинг**:
     - Статус в разделе "Actions" репозитория
     - Логи сборки и деплоя
-
-### Ручной деплой
-
-```bash
-# Установить gh-pages (если нужно)
-yarn add -D gh-pages
-
-# Собрать и задеплоить
-yarn deploy
-```
 
 Подробная инструкция в [DEPLOYMENT.md](./DEPLOYMENT.md)
 
