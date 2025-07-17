@@ -1,7 +1,6 @@
 import React from "react";
 import {
     WalletMultiButton,
-    WalletDisconnectButton,
 } from "@solana/wallet-adapter-react-ui";
 import { useSolana } from "../../shared/lib/useSolana";
 import * as Styled from "./WalletConnection.styles.ts";
@@ -13,16 +12,15 @@ export const WalletConnection: React.FC = () => {
         <Styled.WalletButtons>
             <Styled.WalletButtonWrapper>
                 <WalletMultiButton />
-                {wallet && !connected && (
+                {wallet && connected && (
                     <Styled.CancelWalletButton
                         onClick={cancelWalletSelection}
-                        title={`Отменить выбор ${wallet.adapter.name}`}
+                        title={`Отключить кошелек ${wallet.adapter.name}`}
                     >
                         ✕
                     </Styled.CancelWalletButton>
                 )}
             </Styled.WalletButtonWrapper>
-            {connected && <WalletDisconnectButton />}
         </Styled.WalletButtons>
     );
 };
