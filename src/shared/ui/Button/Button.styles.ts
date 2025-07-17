@@ -1,6 +1,7 @@
 import styled from "styled-components";
 
 export const StyledButton = styled.button<{ variant: "primary" | "secondary" }>`
+    position: relative;
     padding: 12px 24px;
     border: none;
     border-radius: 6px;
@@ -54,4 +55,17 @@ export const StyledButton = styled.button<{ variant: "primary" | "secondary" }>`
             background: #e9ecef;
         }
     `}
+`;
+
+export const ButtonLoader = styled.span`
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* margin-right: 8px; */
 `;

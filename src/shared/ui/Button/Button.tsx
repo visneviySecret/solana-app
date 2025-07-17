@@ -1,5 +1,6 @@
 import React from "react";
-import { StyledButton } from "./Button.styles";
+import { ButtonLoader, StyledButton } from "./Button.styles";
+import { Loader } from "../Loader";
 
 interface ButtonProps {
     children: React.ReactNode;
@@ -7,6 +8,7 @@ interface ButtonProps {
     disabled?: boolean;
     variant?: "primary" | "secondary";
     type?: "button" | "submit" | "reset";
+    loader?: boolean;
 }
 
 export const Button: React.FC<ButtonProps> = ({
@@ -15,7 +17,9 @@ export const Button: React.FC<ButtonProps> = ({
     disabled = false,
     variant = "primary",
     type = "button",
+    loader = false,
 }) => {
+
     return (
         <StyledButton
             onClick={onClick}
@@ -23,6 +27,11 @@ export const Button: React.FC<ButtonProps> = ({
             variant={variant}
             type={type}
         >
+            {loader && (
+                <ButtonLoader>
+                    <Loader size={18} />
+                </ButtonLoader>
+            )}
             {children}
         </StyledButton>
     );

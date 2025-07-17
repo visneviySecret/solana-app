@@ -5,20 +5,13 @@ import { useSolana } from "../../shared/lib/useSolana";
 import { useWalletStore } from "../../shared/store/walletStore";
 import { TRANSACTION_AMOUNTS } from "../../shared/constants";
 
-interface TransactionSendProps {
-    loading: boolean;
-    onTransactionSent: () => void;
-}
-
-export const TransactionSend: React.FC<TransactionSendProps> = ({
-    loading,
-    onTransactionSent,
-}) => {
+export const TransactionSend: React.FC = () => {
     const {
         publicKey,
         connected,
         sendTransaction,
         connection,
+        loading,
         setLoading,
         saveTransaction,
     } = useSolana();
@@ -48,8 +41,6 @@ export const TransactionSend: React.FC<TransactionSendProps> = ({
             saveTransaction(signature);
 
             console.log("Транзакция отправлена:", signature);
-
-            onTransactionSent();
         } catch (error) {
             console.error("Ошибка отправки транзакции:", error);
         } finally {
@@ -62,7 +53,6 @@ export const TransactionSend: React.FC<TransactionSendProps> = ({
         sendTransaction,
         setLoading,
         saveTransaction,
-        onTransactionSent,
     ]);
 
     return (
