@@ -10,7 +10,7 @@ export const SolanaInstruction: React.FC = () => {
                 i
             </Styled.InfoButton>
 
-            <h1>Solana Wallet Adapter</h1>
+            <h1>Solana Wallet Practice</h1>
             <p>Подключите кошелек для взаимодействия с Solana</p>
 
             {modalOpen && (
