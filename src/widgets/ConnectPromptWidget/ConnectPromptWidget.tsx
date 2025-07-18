@@ -1,18 +1,21 @@
 import React from "react";
 import * as Styled from "./ConnectPromptWidget.styles.ts";
+import { useTranslation } from "react-i18next";
 
 export const ConnectPromptWidget: React.FC = () => {
+    const { t } = useTranslation();
+
     return (
         <Styled.ConnectPrompt data-onboarding-id="onboarding-connect-prompt">
-            <p>Подключите кошелек для начала работы с Solana</p>
-            <p>Поддерживаемые кошельки: Phantom, Solflare, Torus</p>
+            <p>{t("prompt.connect")}</p>
+            <p>{t("prompt.supported_wallets")}</p>
             <Styled.Features>
-                <h4>Возможности:</h4>
+                <h4>{t("prompt.features_title")}:</h4>
                 <ul>
-                    <li>Просмотр баланса кошелька</li>
-                    <li>Отправка тестовых транзакций</li>
-                    <li>Взаимодействие с Solana devnet</li>
-                    <li>Интеграция с популярными кошельками</li>
+                    <li>{t("prompt.feature1")}</li>
+                    <li>{t("prompt.feature2")}</li>
+                    <li>{t("prompt.feature3")}</li>
+                    <li>{t("prompt.feature4")}</li>
                 </ul>
             </Styled.Features>
         </Styled.ConnectPrompt>

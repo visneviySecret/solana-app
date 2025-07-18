@@ -5,9 +5,11 @@ import {
     SOLANA_NETWORK,
 } from "../../shared/constants";
 import * as Styled from "./TransactionHistoryWidget.styles.ts";
+import { useTranslation } from "react-i18next";
 
 export const TransactionHistoryWidget: React.FC = () => {
     const { lastTransactionSignature } = useWalletStore();
+    const { t } = useTranslation();
 
     if (!lastTransactionSignature) {
         return null;
@@ -15,7 +17,7 @@ export const TransactionHistoryWidget: React.FC = () => {
 
     return (
         <Styled.TransactionInfo>
-            <h4>Последняя транзакция:</h4>
+            <h4>{t("transaction.last_title")}:</h4>
             <Styled.TxLink
                 href={`${SOLANA_EXPLORER_BASE_URL}/tx/${lastTransactionSignature}?cluster=${SOLANA_NETWORK.DEVNET}`}
                 target="_blank"
@@ -27,7 +29,7 @@ export const TransactionHistoryWidget: React.FC = () => {
                 )}...${lastTransactionSignature.slice(-8)}`}
             </Styled.TxLink>
             <Styled.TxNote>
-                Нажмите для просмотра в Solana Explorer
+                {t("transaction.click_to_view")}
             </Styled.TxNote>
         </Styled.TransactionInfo>
     );

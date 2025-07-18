@@ -1,9 +1,11 @@
 import React, { useCallback } from "react";
 import { Button } from "../../shared/ui/Button";
 import { useSolana } from "../../shared/lib/useSolana";
+import { useTranslation } from "react-i18next";
 
 export const BalanceCheck: React.FC = () => {
     const { publicKey, getBalance, loading, setLoading } = useSolana();
+    const { t } = useTranslation();
 
     const handleGetBalance = useCallback(async () => {
         if (!publicKey) return;
@@ -20,7 +22,7 @@ export const BalanceCheck: React.FC = () => {
 
     return (
         <Button data-onboarding-id="onboarding-balance-btn" onClick={handleGetBalance} disabled={loading} variant="primary" loader={loading}>
-            Получить баланс
+            {t("buttons.get_balance")}
         </Button>
     );
 };

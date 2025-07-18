@@ -4,6 +4,7 @@ import { Button } from "../../shared/ui/Button";
 import { useSolana } from "../../shared/lib/useSolana";
 import { useWalletStore } from "../../shared/store/walletStore";
 import { TRANSACTION_AMOUNTS } from "../../shared/constants";
+import { useTranslation } from "react-i18next";
 
 interface TransactionSendProps {
     showToast?: (msg: string) => void;
@@ -21,6 +22,7 @@ export const TransactionSend: React.FC<TransactionSendProps> = ({ showToast }) =
     } = useSolana();
 
     const { walletBalance } = useWalletStore();
+    const { t } = useTranslation();
 
     const sendTestTransaction = useCallback(async () => {
         if (!publicKey || !connected) return;
@@ -44,7 +46,7 @@ export const TransactionSend: React.FC<TransactionSendProps> = ({ showToast }) =
 
             saveTransaction(signature);
 
-            if (showToast) showToast("Транзакция отправлена!");
+            if (showToast) showToast(t("toast.tx_sent"));
         } catch (error) {
             console.error("Ошибка отправки транзакции:", error);
         } finally {
@@ -58,6 +60,7 @@ export const TransactionSend: React.FC<TransactionSendProps> = ({ showToast }) =
         setLoading,
         saveTransaction,
         showToast,
+        t,
     ]);
 
     return (
@@ -71,7 +74,7 @@ export const TransactionSend: React.FC<TransactionSendProps> = ({ showToast }) =
             }
             variant="secondary"
         >
-            {loading ? "Отправка..." : "Тестовая транзакция (0.001 SOL)"}
+            {loading ? t("buttons.sending") : t("buttons.send_test")}
         </Button>
     );
 };

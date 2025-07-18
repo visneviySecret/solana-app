@@ -11,6 +11,7 @@ import {
 import * as Styled from "./HomePage.styles.ts";
 import { OnboardingOverlay } from "../../shared/ui/OnboardingOverlay";
 import { Toast } from "../../shared/ui/Toast";
+import "../../shared/i18n";
 
 export const HomePageComponent: React.FC = () => {
     const { connected, publicKey } = useSolana();

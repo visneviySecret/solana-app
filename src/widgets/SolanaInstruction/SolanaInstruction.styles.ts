@@ -34,9 +34,6 @@ export const Header = styled.div`
 `;
 
 export const InfoButton = styled.button`
-    position: absolute;
-    top: 16px;
-    left: 16px;
     width: 36px;
     height: 36px;
     border-radius: 50%;

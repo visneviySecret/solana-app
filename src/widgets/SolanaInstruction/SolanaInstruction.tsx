@@ -1,45 +1,61 @@
 import React, { useState } from "react";
 import * as Styled from "./SolanaInstruction.styles";
+import { useTranslation } from "react-i18next";
+import { LanguageSwitcher } from "../LanguageSwitcher";
+import styled from "styled-components";
+
+const ButtonsWrapper = styled.div`
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    display: flex;
+    gap: 8px;
+    z-index: 21;
+`;
 
 export const SolanaInstruction: React.FC = () => {
     const [modalOpen, setModalOpen] = useState(false);
+    const { t } = useTranslation();
 
     return (
         <Styled.Header>
-            <Styled.InfoButton onClick={() => setModalOpen(true)} title="Информация">
-                i
-            </Styled.InfoButton>
+            <ButtonsWrapper>
+                <Styled.InfoButton onClick={() => setModalOpen(true)} title={t("buttons.info")}>
+                    i
+                </Styled.InfoButton>
+                <LanguageSwitcher />
+            </ButtonsWrapper>
 
-            <h1>Solana Wallet Practice</h1>
-            <p>Подключите кошелек для взаимодействия с Solana</p>
+            <h1>{t("header.title")}</h1>
+            <p>{t("header.subtitle")}</p>
 
             {modalOpen && (
                 <Styled.ModalOverlay onClick={() => setModalOpen(false)}>
                     <Styled.ModalContent onClick={(e: React.MouseEvent<HTMLDivElement>) => e.stopPropagation()}>
                         <Styled.ModalClose onClick={() => setModalOpen(false)}>&times;</Styled.ModalClose>
-                        <h2>Инструкция: Phantom + Solana Devnet</h2>
+                        <h2>{t("instruction.title")}</h2>
                         <ol>
                             <li>
-                                <b>Установите кошелек Phantom</b> — скачайте расширение для браузера с <a href="https://phantom.app/" target="_blank" rel="noopener noreferrer">официального сайта</a> и создайте новый кошелек или импортируйте существующий.
+                                <b>{t("instruction.step1_title")}</b> — {t("instruction.step1_desc")} <a href="https://phantom.app/" target="_blank" rel="noopener noreferrer">{t("instruction.official_site")}</a> {t("instruction.step1_create")}.
                             </li>
                             <li>
-                                <b>Вход в тестовый кошелек</b> — используйте следующие данные для входа или восстановления:
+                                <b>{t("instruction.step2_title")}</b> — {t("instruction.step2_desc")}:
                                 <ul>
-                                    <li><b>Логин:</b> AmpleGrove2196</li>
-                                    <li><b>Пароль:</b> testMySolanaApp</li>
+                                    <li><b>{t("instruction.login")}:</b> AmpleGrove2196</li>
+                                    <li><b>{t("instruction.password")}:</b> testMySolanaApp</li>
                                 </ul>
-                                <b>Или создайте новый кошелек.</b>
+                                <b>{t("instruction.or_create_new")}.</b>
                             </li>
                             <li>
-                                <b>Подключите кошелек к приложению</b> — нажмите кнопку "Подключить кошелек" и выберите Phantom.</li>
+                                <b>{t("instruction.step3_title")}</b> — {t("instruction.step3_desc")}.</li>
                             <li>
-                                <b>Проверьте баланс</b> — используйте кнопку "Получить баланс".</li>
+                                <b>{t("instruction.step4_title")}</b> — {t("instruction.step4_desc")}.</li>
                             <li>
-                                <b>Отправьте тестовую транзакцию</b> — нажмите "Тестовая транзакция (0.001 SOL)" для проверки работы отправки.</li>
+                                <b>{t("instruction.step5_title")}</b> — {t("instruction.step5_desc")}.</li>
                             <li>
-                                <b>Если в тестовом кошельке закончились средства</b> — перейдите на <a href="https://faucet.solana.com/" target="_blank" rel="noopener noreferrer">https://faucet.solana.com/</a> и пополните кошелёк. Адрес для пополнения можно скопировать в Phantom → Account → Devnet.</li>
+                                <b>{t("instruction.step6_title")}</b> — {t("instruction.step6_desc")} <a href="https://faucet.solana.com/" target="_blank" rel="noopener noreferrer">https://faucet.solana.com/</a> {t("instruction.step6_copy")}.</li>
                         </ol>
-                        <p style={{ marginTop: '1rem', color: '#555' }}>Все операции выполняются только в тестовой сети Devnet и не затрагивают реальные средства.</p>
+                        <p style={{ marginTop: '1rem', color: '#555' }}>{t("instruction.disclaimer")}</p>
                     </Styled.ModalContent>
                 </Styled.ModalOverlay>
             )}
