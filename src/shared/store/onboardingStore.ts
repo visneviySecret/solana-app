@@ -9,11 +9,12 @@ export enum OnboardingStep {
     Done = "done",
 }
 
+const ONBOARDING_KEY = "onboarding_completed";
+
 interface OnboardingState {
     step: OnboardingStep;
     completed: boolean;
     nextStep: () => void;
-    reset: () => void;
     setStep: (step: OnboardingStep) => void;
     finish: () => void;
 }
@@ -27,17 +28,34 @@ const steps: OnboardingStep[] = [
     OnboardingStep.Done,
 ];
 
+function getInitialCompleted() {
+    return localStorage.getItem(ONBOARDING_KEY) === "true";
+}
+
 export const useOnboardingStore = create<OnboardingState>((set, get) => ({
     step: OnboardingStep.ConnectWallet,
-    completed: false,
+    completed: getInitialCompleted(),
     nextStep: () => {
+        if (get().completed) return
         const current = get().step;
         const idx = steps.indexOf(current);
         if (idx < steps.length - 1) {
-            set({ step: steps[idx + 1], completed: steps[idx + 1] === OnboardingStep.Done });
+            const next = steps[idx + 1];
+            set({ step: next, completed: next === OnboardingStep.Done });
+            if (next === OnboardingStep.Done) {
+                localStorage.setItem(ONBOARDING_KEY, "true");
+            }
         }
     },
-    reset: () => set({ step: OnboardingStep.ConnectWallet, completed: false }),
-    setStep: (step) => set({ step, completed: step === OnboardingStep.Done }),
-    finish: () => set({ completed: true }),
+    setStep: (step) => {
+        if (get().completed) return
+        set({ step, completed: step === OnboardingStep.Done });
+        if (step === OnboardingStep.Done) {
+            localStorage.setItem(ONBOARDING_KEY, "true");
+        }
+    },
+    finish: () => {
+        set({ step: OnboardingStep.Done, completed: true });
+        localStorage.setItem(ONBOARDING_KEY, "true");
+    },
 })); 

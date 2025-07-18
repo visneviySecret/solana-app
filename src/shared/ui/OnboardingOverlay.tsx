@@ -81,7 +81,7 @@ function useBubblePosition(step: string) {
 }
 
 export const OnboardingOverlay: React.FC = () => {
-    const { step, completed, nextStep, finish } = useOnboardingStore();
+    const { step, completed } = useOnboardingStore();
 
     const pos = useBubblePosition(step);
     if (completed || step === "done") return null;
