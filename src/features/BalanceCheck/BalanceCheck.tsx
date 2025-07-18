@@ -19,7 +19,7 @@ export const BalanceCheck: React.FC = () => {
     }, [publicKey, getBalance, setLoading]);
 
     return (
-        <Button onClick={handleGetBalance} disabled={loading} variant="primary" loader={loading}>
+        <Button data-onboarding-id="onboarding-balance-btn" onClick={handleGetBalance} disabled={loading} variant="primary" loader={loading}>
             Получить баланс
         </Button>
     );

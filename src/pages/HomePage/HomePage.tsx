@@ -9,12 +9,14 @@ import {
     ConnectPromptWidget,
 } from "../../widgets";
 import * as Styled from "./HomePage.styles.ts";
+import { OnboardingOverlay } from "../../shared/ui/OnboardingOverlay";
 
 export const HomePageComponent: React.FC = () => {
     const { connected, publicKey } = useSolana();
 
     return (
         <Styled.ResponsiveContainer>
+            <OnboardingOverlay />
             <Styled.HomePage>
                 <PageHeader />
 

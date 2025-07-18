@@ -3,7 +3,7 @@ import * as Styled from "./ConnectPromptWidget.styles.ts";
 
 export const ConnectPromptWidget: React.FC = () => {
     return (
-        <Styled.ConnectPrompt>
+        <Styled.ConnectPrompt data-onboarding-id="onboarding-connect-prompt">
             <p>Подключите кошелек для начала работы с Solana</p>
             <p>Поддерживаемые кошельки: Phantom, Solflare, Torus</p>
             <Styled.Features>

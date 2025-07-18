@@ -18,6 +18,7 @@ export const Button: React.FC<ButtonProps> = ({
     variant = "primary",
     type = "button",
     loader = false,
+    ...props
 }) => {
 
     return (
@@ -26,6 +27,7 @@ export const Button: React.FC<ButtonProps> = ({
             disabled={disabled}
             variant={variant}
             type={type}
+            {...props}
         >
             {loader && (
                 <ButtonLoader>

@@ -57,6 +57,7 @@ export const TransactionSend: React.FC = () => {
 
     return (
         <Button
+            data-onboarding-id="onboarding-send-btn"
             onClick={sendTestTransaction}
             disabled={
                 loading ||

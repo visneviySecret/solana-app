@@ -3,12 +3,14 @@ import { PublicKey, LAMPORTS_PER_SOL } from "@solana/web3.js";
 import { useState, useCallback, useEffect } from "react";
 import { useWalletStore } from "../store/walletStore";
 import { WALLET_NAMES, LOCAL_STORAGE_KEYS } from "../constants";
+import { OnboardingStep, useOnboardingStore } from "../store/onboardingStore";
 
 export const useSolana = () => {
     const { publicKey, connected, sendTransaction, disconnect, wallet } =
         useWallet();
     const { connection } = useConnection();
     const [loading, setLoading] = useState(false);
+    const { step, nextStep, finish, setStep } = useOnboardingStore();
 
     const {
         setSelectedWallet,
@@ -28,7 +30,8 @@ export const useSolana = () => {
 
     useEffect(() => {
         setWalletConnected(connected);
-    }, [connected, setWalletConnected]);
+        if (connected && step === "connect-wallet" && publicKey) setStep(OnboardingStep.CheckBalance);
+    }, [connected, publicKey, setWalletConnected]);
 
     useEffect(() => {
         if (publicKey) {
@@ -48,6 +51,7 @@ export const useSolana = () => {
                 const balanceInSol = balance / LAMPORTS_PER_SOL;
 
                 setWalletBalance(balanceInSol);
+                if (step === "check-balance") nextStep();
 
                 return balanceInSol;
             } catch (error) {
@@ -55,7 +59,7 @@ export const useSolana = () => {
                 return null;
             }
         },
-        [publicKey, connection, setWalletBalance]
+        [publicKey, connection, setWalletBalance, step, nextStep]
     );
 
     const getAccountInfo = useCallback(
@@ -111,8 +115,9 @@ export const useSolana = () => {
     const saveTransaction = useCallback(
         (signature: string) => {
             setLastTransaction(signature);
+            if (step === "send-transaction") finish();
         },
-        [setLastTransaction]
+        [setLastTransaction, step, finish]
     );
 
     return {
