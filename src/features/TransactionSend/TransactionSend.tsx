@@ -5,7 +5,11 @@ import { useSolana } from "../../shared/lib/useSolana";
 import { useWalletStore } from "../../shared/store/walletStore";
 import { TRANSACTION_AMOUNTS } from "../../shared/constants";
 
-export const TransactionSend: React.FC = () => {
+interface TransactionSendProps {
+    showToast?: (msg: string) => void;
+}
+
+export const TransactionSend: React.FC<TransactionSendProps> = ({ showToast }) => {
     const {
         publicKey,
         connected,
@@ -40,7 +44,7 @@ export const TransactionSend: React.FC = () => {
 
             saveTransaction(signature);
 
-            console.log("Транзакция отправлена:", signature);
+            if (showToast) showToast("Транзакция отправлена!");
         } catch (error) {
             console.error("Ошибка отправки транзакции:", error);
         } finally {
@@ -53,6 +57,7 @@ export const TransactionSend: React.FC = () => {
         sendTransaction,
         setLoading,
         saveTransaction,
+        showToast,
     ]);
 
     return (
