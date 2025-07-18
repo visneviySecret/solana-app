@@ -1,38 +1,38 @@
 import React, { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
+import { useTranslation } from "react-i18next";
 import { useOnboardingStore } from "../store/onboardingStore";
 import { Bubble } from "./OnboardingOverlay.styles";
 
-const bubbleTexts: Record<string, React.ReactNode> = {
+const getBubbleTexts = (t: any): Record<string, React.ReactNode> => ({
     "connect-wallet": (
         <>
-            <b>Шаг 1:</b> Подключите кошелёк к приложению.<br />
-            {/* Нажмите "Подключить кошелёк" и выберите Phantom. */}
+            <b>{t('onboarding.step')} 1:</b> {t('onboarding.connect_wallet_desc')}<br />
         </>
     ),
     "phantom-login": (
         <>
-            <b>Шаг 2:</b> Войдите в тестовый кошелёк Phantom.<br />
-            Используйте логин <b>AmpleGrove2196</b> и пароль <b>testMySolanaApp</b>.
+            <b>{t('onboarding.step')} 2:</b> {t('onboarding.phantom_login_desc')}<br />
+            {t('onboarding.use_credentials')} <b>AmpleGrove2196</b> {t('onboarding.and_password')} <b>testMySolanaApp</b>.
         </>
     ),
     "get-sol": (
         <>
-            <b>Шаг 3:</b> Получите тестовые SOL.<br />
-            Скопируйте адрес кошелька и пополните через <a href="https://faucet.solana.com/" target="_blank" rel="noopener noreferrer">Solana Faucet</a>.
+            <b>{t('onboarding.step')} 3:</b> {t('onboarding.get_sol_desc')}<br />
+            {t('onboarding.copy_address')} <a href="https://faucet.solana.com/" target="_blank" rel="noopener noreferrer">Solana Faucet</a>.
         </>
     ),
     "check-balance": (
         <>
-            <b>Шаг 4:</b> Проверьте баланс кошелька.<br />
+            <b>{t('onboarding.step')} 4:</b> {t('onboarding.check_balance_desc')}<br />
         </>
     ),
     "send-transaction": (
         <>
-            <b>Шаг 5:</b> Отправьте тестовую транзакцию.<br />
+            <b>{t('onboarding.step')} 5:</b> {t('onboarding.send_transaction_desc')}<br />
         </>
     ),
-};
+});
 
 const getAnchorId = (step: string): string | null => {
     switch (step) {
@@ -82,10 +82,13 @@ function useBubblePosition(step: string) {
 
 export const OnboardingOverlay: React.FC = () => {
     const { step, completed } = useOnboardingStore();
+    const { t } = useTranslation();
 
     const pos = useBubblePosition(step);
     if (completed || step === "done") return null;
     if (!pos) return null;
+
+    const bubbleTexts = getBubbleTexts(t);
 
     return createPortal(
         <Bubble style={{ top: pos.top, left: pos.left }}>

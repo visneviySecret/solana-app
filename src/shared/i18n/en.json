@@ -10,7 +10,16 @@
     "get_sol": "Step 4: Get test SOL from the Solana Faucet.",
     "check_balance": "Step 5: Check your wallet balance.",
     "send_transaction": "Step 6: Send a test transaction.",
-    "done": "Onboarding complete! You can now use the app."
+    "done": "Onboarding complete! You can now use the app.",
+    "step": "Step",
+    "connect_wallet_desc": "Connect your wallet to the app.",
+    "phantom_login_desc": "Log in to the test Phantom wallet.",
+    "use_credentials": "Use login",
+    "and_password": "and password",
+    "get_sol_desc": "Get test SOL.",
+    "copy_address": "Copy wallet address and refill through",
+    "check_balance_desc": "Check your wallet balance.",
+    "send_transaction_desc": "Send a test transaction."
   },
   "buttons": {
     "connect": "Connect Wallet",
