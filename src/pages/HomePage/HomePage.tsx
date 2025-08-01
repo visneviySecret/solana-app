@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useCallback } from "react";
 import { useSolana } from "../../shared/lib/useSolana";
 import {
     PageHeader,
@@ -9,12 +9,19 @@ import {
     ConnectPromptWidget,
 } from "../../widgets";
 import * as Styled from "./HomePage.styles.ts";
+import { OnboardingOverlay } from "../../shared/ui/OnboardingOverlay";
+import { Toast } from "../../shared/ui/Toast";
+import "../../shared/i18n";
 
 export const HomePageComponent: React.FC = () => {
     const { connected, publicKey } = useSolana();
+    const [toast, setToast] = useState<string>("");
+    const showToast = useCallback((msg: string) => setToast(msg), []);
 
     return (
         <Styled.ResponsiveContainer>
+            <OnboardingOverlay />
+            <Toast message={toast} onClose={() => setToast("")} />
             <Styled.HomePage>
                 <PageHeader />
 
@@ -24,7 +31,7 @@ export const HomePageComponent: React.FC = () => {
                     {connected && publicKey ? (
                         <Styled.WalletInfo>
                             <WalletInfoWidget />
-                            <WalletActionsWidget />
+                            <WalletActionsWidget showToast={showToast} />
                             <TransactionHistoryWidget />
                         </Styled.WalletInfo>
                     ) : (

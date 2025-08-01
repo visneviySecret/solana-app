@@ -1,0 +1,81 @@
+{
+  "header": {
+    "title": "Try Phantom Wallet",
+    "subtitle": "Connect your wallet to interact with Solana"
+  },
+  "onboarding": {
+    "connect_wallet": "Step 1: Connect your wallet to the app.",
+    "phantom_login": "Step 2: Log in to the test Phantom wallet. Use login AmpleGrove2196 and password testMySolanaApp.",
+    "switch_devnet": "Step 3: Switch to Devnet in Phantom settings.",
+    "get_sol": "Step 4: Get test SOL from the Solana Faucet.",
+    "check_balance": "Step 5: Check your wallet balance.",
+    "send_transaction": "Step 6: Send a test transaction.",
+    "done": "Onboarding complete! You can now use the app.",
+    "step": "Step",
+    "connect_wallet_desc": "Connect your wallet to the app.",
+    "phantom_login_desc": "Log in to the test Phantom wallet.",
+    "use_credentials": "Use login",
+    "and_password": "and password",
+    "get_sol_desc": "Get test SOL.",
+    "copy_address": "Copy wallet address and refill through",
+    "check_balance_desc": "Check your wallet balance.",
+    "send_transaction_desc": "Send a test transaction."
+  },
+  "buttons": {
+    "connect": "Connect Wallet",
+    "disconnect": "Disconnect",
+    "get_balance": "Get Balance",
+    "send_test": "Test Transaction (0.001 SOL)",
+    "sending": "Sending...",
+    "next": "Next",
+    "finish": "Finish",
+    "info": "Info",
+    "lang": "RU"
+  },
+  "instruction": {
+    "title": "Instructions: Phantom + Solana Devnet",
+    "step1_title": "Install Phantom Wallet",
+    "step1_desc": "download the browser extension from the",
+    "official_site": "official website",
+    "step1_create": "and create a new wallet or import an existing one",
+    "step2_title": "Login to test wallet",
+    "step2_desc": "use the following credentials for login or recovery",
+    "login": "Login",
+    "password": "Password",
+    "or_create_new": "Or create a new wallet",
+    "step3_title": "Connect wallet to the app",
+    "step3_desc": "click \"Connect Wallet\" button and select Phantom",
+    "step4_title": "Check balance",
+    "step4_desc": "use the \"Get Balance\" button",
+    "step5_title": "Send test transaction",
+    "step5_desc": "click \"Test Transaction (0.001 SOL)\" to test sending",
+    "step6_title": "If test wallet runs out of funds",
+    "step6_desc": "go to",
+    "step6_copy": "and refill your wallet. You can copy the address in Phantom → Account → Devnet",
+    "disclaimer": "All operations are performed only on the Devnet test network and do not affect real funds."
+  },
+  "prompt": {
+    "connect": "Connect your wallet to start working with Solana",
+    "supported_wallets": "Supported wallets: Phantom, Solflare, Torus",
+    "features_title": "Features",
+    "feature1": "View wallet balance",
+    "feature2": "Send test transactions",
+    "feature3": "Interact with Solana devnet",
+    "feature4": "Integration with popular wallets"
+  },
+  "transaction": {
+    "last_title": "Last transaction",
+    "click_to_view": "Click to view in Solana Explorer"
+  },
+  "toast": {
+    "tx_sent": "Test transaction sent!"
+  },
+  "wallet_info": {
+    "title": "Wallet Information",
+    "wallet": "Wallet:",
+    "full_address": "Full address:",
+    "short_address": "Short address:",
+    "network": "Network:",
+    "balance": "Balance:"
+  }
+} 

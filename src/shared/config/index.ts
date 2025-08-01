@@ -1,7 +1,7 @@
 // Конфигурация приложения
 
 export const APP_CONFIG = {
-    name: "Solana React App",
+    name: "Solana Wallet Practice",
     version: "1.0.0",
     solana: {
         network: import.meta.env.VITE_SOLANA_NETWORK || "devnet",

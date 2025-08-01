@@ -1,24 +1,17 @@
-import React, { useState, useCallback } from "react";
+import React from "react";
 import { BalanceCheck } from "../../features/BalanceCheck";
 import { TransactionSend } from "../../features/TransactionSend";
 import * as Styled from "./WalletActionsWidget.styles.ts";
 
-export const WalletActionsWidget: React.FC = () => {
-    const [loading, setLoading] = useState(false);
+interface WalletActionsWidgetProps {
+    showToast?: (msg: string) => void;
+}
 
-    const handleTransactionSent = useCallback(() => {
-        setTimeout(() => {
-            setLoading(false);
-        }, 2000);
-    }, []);
-
+export const WalletActionsWidget: React.FC<WalletActionsWidgetProps> = ({ showToast }) => {
     return (
         <Styled.Actions>
-            <BalanceCheck loading={loading} />
-            <TransactionSend
-                loading={loading}
-                onTransactionSent={handleTransactionSent}
-            />
+            <BalanceCheck />
+            <TransactionSend showToast={showToast} />
         </Styled.Actions>
     );
 };

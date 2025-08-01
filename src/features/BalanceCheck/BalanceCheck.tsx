@@ -1,13 +1,11 @@
 import React, { useCallback } from "react";
 import { Button } from "../../shared/ui/Button";
 import { useSolana } from "../../shared/lib/useSolana";
+import { useTranslation } from "react-i18next";
 
-interface BalanceCheckProps {
-    loading: boolean;
-}
-
-export const BalanceCheck: React.FC<BalanceCheckProps> = ({ loading }) => {
-    const { publicKey, getBalance, setLoading } = useSolana();
+export const BalanceCheck: React.FC = () => {
+    const { publicKey, getBalance, loading, setLoading } = useSolana();
+    const { t } = useTranslation();
 
     const handleGetBalance = useCallback(async () => {
         if (!publicKey) return;
@@ -23,8 +21,8 @@ export const BalanceCheck: React.FC<BalanceCheckProps> = ({ loading }) => {
     }, [publicKey, getBalance, setLoading]);
 
     return (
-        <Button onClick={handleGetBalance} disabled={loading} variant="primary">
-            {loading ? "Загрузка..." : "Получить баланс"}
+        <Button data-onboarding-id="onboarding-balance-btn" onClick={handleGetBalance} disabled={loading} variant="primary" loader={loading}>
+            {t("buttons.get_balance")}
         </Button>
     );
 };
