@@ -12,7 +12,19 @@ export default defineConfig(({ command, mode }) => {
     return {
         base: isProduction && isGitHubPages ? "/solana-app/" : "/",
         plugins: [
-            react(),
+            react({
+                babel: {
+                    plugins: [
+                        [
+                            "babel-plugin-styled-components",
+                            {
+                                displayName: true,
+                                fileName: false, // по желанию, чтобы убрать из класса имя файла
+                            },
+                        ],
+                    ],
+                },
+            }),
             nodePolyfills({
                 include: [
                     "buffer",
